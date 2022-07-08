@@ -38,7 +38,9 @@ an in-memory-database). The challenge consists of completing as many of the foll
     "new_payments": "sum of all new payments",
     "new_payments_amount": "sum of the amount of each payment"
   },
-  ...
+  {
+    ...
+  }
 ]
 ```
 

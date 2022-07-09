@@ -1,10 +1,5 @@
 package com.example.clip.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,20 +10,48 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "payment")
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
 public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
-    @Column(name = "amount")
+    @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private String userId;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", userId='" + userId + '\'' +
+                '}';
+    }
 }

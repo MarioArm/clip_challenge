@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 
 @Getter
@@ -14,6 +17,9 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @ToString
 public class PaymentRequest {
-    String userId;
-    BigDecimal amount;
+    @NotBlank
+    private String userId;
+    @PositiveOrZero
+    @NotNull
+    private BigDecimal amount;
 }

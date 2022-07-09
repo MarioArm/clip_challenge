@@ -15,7 +15,9 @@ This application consist of the following:
 - Controller package:  where the basic endpoint is.
 - Repository package:  repository package for repository classes.
 - Model package: where entities are stored.
+- exception package: Classes related to the exception handling. 
 - Request package: objects that represent requests.
+- Response package: object that represent responses.
 
 The project contains a simple API that saves a payment in an in-memory database (for the sake of this example let's use
 an in-memory-database). The challenge consists of completing as many of the following steps as possible:

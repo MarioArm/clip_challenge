@@ -1,6 +1,6 @@
 DELETE FROM payment;
 
-INSERT INTO `payment` (`id`, `user_id`, `amount`) VALUES
+INSERT INTO `payment` (`id`, `user_id`, `amount`, `status`) VALUES
 (1, 'user-id-1', 10, 'PROCESSED'),
 (2, 'user-id-2', 11, 'PROCESSED'),
 (3, 'user-id-3', 12, 'PROCESSED'),

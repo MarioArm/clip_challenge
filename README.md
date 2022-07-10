@@ -8,16 +8,26 @@
 - Maven 4
 - Java 11
 
+## Run tests
+
+To run automated integration tests, you just need to execute the following command:
+> ./mvnw test
+
+## Run spring boot application
+In order to run this project, execute the following:
+> ./mvnw spring-boot:run
+
 ## Description
 
 This application consist of the following:
 
-- Controller package:  where the basic endpoint is.
+- Controller package:  where the basic endpoint is defined.
 - Repository package:  repository package for repository classes.
 - Model package: where entities are stored.
 - exception package: Classes related to the exception handling.
 - Request package: objects that represent requests.
 - Response package: object that represent responses.
+- Service package: Classes that contain business logic.
 
 The project contains a simple API that saves a payment in an in-memory database (for the sake of this example let's use
 an in-memory-database). The challenge consists of completing as many of the following steps as possible:

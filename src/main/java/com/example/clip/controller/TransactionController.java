@@ -54,7 +54,9 @@ public class TransactionController {
     @Transactional
     @PostMapping(value = "/disbursement/process")
     public ResponseEntity<ProcessDisbursementResponse> processDisbursement() {
+        log.debug("Request to process disbursement received:");
         ProcessDisbursementResponse response = disbursementService.processDisbursement();
+        log.info("Disbursement processing was successful");
         return ResponseEntity.ok().body(response);
     }
 }

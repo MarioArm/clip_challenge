@@ -2,17 +2,21 @@ package com.example.clip.controller;
 
 import com.example.clip.repository.PaymentRepository;
 import com.example.clip.response.GetAllUsersResponse;
+import com.example.clip.response.UserReportResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URI;
 import java.util.List;
 
@@ -20,12 +24,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DirtiesContext
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserControllerTest {
 
     @LocalServerPort
     private int port;
+    private static final String URI_FORMAT = "http://localhost:%s/api/clip/user/%s";
     private URI getAllUsersUri;
     @Autowired
     private TestRestTemplate restTemplate;
@@ -35,7 +39,7 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        getAllUsersUri = URI.create("http://localhost:" + port + "/api/clip/user/getAll");
+        getAllUsersUri = URI.create(String.format(URI_FORMAT, port, "getAll"));
     }
 
 
@@ -71,5 +75,57 @@ class UserControllerTest {
                         "user-id-14",
                         "user-id-15"
                 )).build();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"user-id-1", "user-id-2", "user-id-14", "user-id-15",})
+    @Sql(scripts = "classpath:sql/user_controller-get_user_report-success.sql")
+    void shouldSuccessToGenerateUserReport(String userId) {
+        UserReportResponse expectedResponse = getExpectedUserReportResponse(userId);
+
+        ResponseEntity<UserReportResponse> responseEntity =
+                this.restTemplate.getForEntity(
+                        URI.create(String.format(URI_FORMAT, port, userId + "/report")), UserReportResponse.class);
+
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        UserReportResponse response = responseEntity.getBody();
+        assertNotNull(response);
+        assertEquals(expectedResponse, response);
+    }
+
+    private UserReportResponse getExpectedUserReportResponse(String userId) {
+        switch (userId) {
+            case "user-id-1":
+                return UserReportResponse.builder()
+                        .userName("user-id-1")
+                        .paymentsSum(BigDecimal.valueOf(10).setScale(2, RoundingMode.DOWN))
+                        .newPayments(0)
+                        .newPaymentsAmount(BigDecimal.valueOf(0).setScale(2, RoundingMode.DOWN))
+                        .build();
+            case "user-id-2":
+                return UserReportResponse.builder()
+                        .userName("user-id-2")
+                        .paymentsSum(BigDecimal.valueOf(10).setScale(2, RoundingMode.DOWN))
+                        .newPayments(0)
+                        .newPaymentsAmount(BigDecimal.valueOf(0).setScale(2, RoundingMode.DOWN))
+                        .build();
+            case "user-id-14":
+                return UserReportResponse.builder()
+                        .userName("user-id-14")
+                        .paymentsSum(BigDecimal.valueOf(10).setScale(2, RoundingMode.DOWN))
+                        .newPayments(1)
+                        .newPaymentsAmount(BigDecimal.valueOf(10).setScale(2, RoundingMode.DOWN))
+                        .build();
+            case "user-id-15":
+                return UserReportResponse.builder()
+                        .userName("user-id-15")
+                        .paymentsSum(BigDecimal.valueOf(30).setScale(2, RoundingMode.DOWN))
+                        .newPayments(1)
+                        .newPaymentsAmount(BigDecimal.valueOf(20).setScale(2, RoundingMode.DOWN))
+                        .build();
+            default:
+                throw new IllegalArgumentException("This user ID is not allowed");
+        }
     }
 }

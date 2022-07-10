@@ -5,16 +5,16 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
-import java.util.List;
+import java.util.Map;
 
-@Setter
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class GetAllUsersResponse {
-    private List<String> userIdList;
+@ToString
+public class ProcessDisbursementResponse {
+    Map<String, DisbursementDetails> disbursementDetailsMap;
 }

@@ -3,6 +3,7 @@ package com.example.clip.service;
 import com.example.clip.model.Payment;
 import com.example.clip.model.PaymentStatus;
 import com.example.clip.repository.PaymentRepository;
+import com.example.clip.response.GetAllUsersResponse;
 import com.example.clip.response.UserReportResponse;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,12 @@ public class UserServiceImpl implements UserService {
         populateUserReportResponseWithPaymentList(userReportResponse, paymentList);
 
         return userReportResponse;
+    }
+
+    @Override
+    public GetAllUsersResponse getAllUsers() {
+        List<String> uniqueUserIdList = paymentRepository.findAllUniqueUserId();
+        return GetAllUsersResponse.builder().userIdList(uniqueUserIdList).build();
     }
 
     private void populateUserReportResponseWithPaymentList(UserReportResponse userReportResponse, List<Payment> paymentList) {
